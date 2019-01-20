@@ -1,9 +1,8 @@
 import pyautogui
 import time
 import subprocess
-# from appjar import gui
-# from coordinates import *
 from multiprocessing import Process
+# from appjar import gui
 
 SCREEN_SIZE_X_VALUE = 0
 SCREEN_SIZE_Y_VALUE = 1
@@ -22,10 +21,10 @@ SCREEN_SIZE_TUPLE = screen_size_tuple = pyautogui.size()
 # Helper function to perform the initial setup of the application
 def perform_initial_application_setup(application):
 	open(application)
+	time.sleep(.5)
 	maximize_application()
 	center_mouse_on_screen()
 	pyautogui.press('esc')
-
 
 
 # Helper function to open the application specified by the user 
@@ -54,8 +53,6 @@ def center_mouse_on_screen():
 	pyautogui.moveTo(x_center_location, y_center_location)
 
 
-
-
 # Helper function to assist in executing further commands 
 def handle_decision(instruction_tuple):
 
@@ -65,13 +62,10 @@ def handle_decision(instruction_tuple):
 
 
 	if command == "open":
-		print("IN OPEN BLOCK")
 		perform_initial_application_setup(content)
 		return
 
-	# TODO: Conditional statements to handle each command
 	if command == "click":
-		print("IN CLICK BLOCK")
 		if content == "contacts_tab":
 			click_contacts_tab()
 		return
@@ -80,12 +74,22 @@ def handle_decision(instruction_tuple):
 		click_search_bar()
 		search_for_person(content)
 		right_click_person()
-		call_person()
+		start_video_call()
 		return
 
+	if command == "stop":
+		end_video_call()
+		return
+
+	if command == "dial":
+		dial_number(content)
+		return
+
+	if command == "close":
+		close_program()
+		return
 
 	else:
-		print("IN THE ELSE BLOCK")
 		return
 
 
@@ -141,11 +145,12 @@ def right_click_person():
 	time.sleep(.5)
 	return
 
-def call_person():
+def start_video_call():
 
 	x_end_value = .2 * SCREEN_SIZE_TUPLE[SCREEN_SIZE_X_VALUE]
 	y_end_value = .5 * SCREEN_SIZE_TUPLE[SCREEN_SIZE_Y_VALUE]
 
+	time.sleep(.5)
 	view_profile_x, view_profile_y = pyautogui.locateCenterOnScreen('screenshots/view_profile.png', region=(X_TOP_LEFT, Y_TOP_LEFT, x_end_value, y_end_value))
 	pyautogui.moveTo(view_profile_x, view_profile_y, .4)
 	pyautogui.doubleClick()
@@ -153,4 +158,28 @@ def call_person():
 	start_call_x, start_call_y = pyautogui.locateCenterOnScreen('screenshots/start_call.png')
 	pyautogui.moveTo(start_call_x, start_call_y, .4)
 	pyautogui.click()
+	return
+
+def end_video_call():
+	# ctrl + e - skype shortcut for ending a video call
+	pyautogui.keyDown('ctrl')
+	pyautogui.press('e')
+	pyautogui.keyUp('ctrl')
+	return
+
+def dial_number(number):
+	# ctrl + d - skype shortcut for opening up dial menu
+	pyautogui.keyDown('ctrl')
+	pyautogui.press('d')
+	pyautogui.keyUp('ctrl')
+	time.sleep(.8)
+	pyautogui.typewrite(number)
+	pyautogui.press('enter')
+
+
+def close_program():
+	# alt + f4 - windows shortcut for closing program
+	pyautogui.keyDown('alt')
+	pyautogui.press('f4')
+	pyautogui.keyUp('alt')
 	return

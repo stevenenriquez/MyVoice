@@ -5,7 +5,8 @@ import functions
 
 
 # What file are we looking for that contains our commands?
-file_dir = "C:/Users/Steven/Desktop/Commands/command.txt"
+#file_dir = "C:/Users/Steven/Desktop/Commands/command.txt"
+file_dir = "C:/Users/Steven/Dropbox/MyVoice/command.txt"
 
 
 # GLOBAL CONSTANTS
@@ -20,6 +21,8 @@ def main():
 		try:
 			file = open(file_dir, 'r')		# Open the file for reading
 
+
+			# split any commands by line/split the two components of each command
 			command_list = [line.strip().split(" ") for line in file]
 
 			print(command_list)
@@ -44,9 +47,10 @@ def main():
 		except Exception as e:
 			print(e)
 			closeListener(file)
-			for file in os.listdir("C:/Users/Steven/Desktop/Commands/"):
+
+			for file in os.listdir("C:/Users/Steven/Dropbox/MyVoice/"):
 				try:
-					os.remove("C:/Users/Steven/Desktop/Commands/" + file)
+					os.remove("C:/Users/Steven/Dropbox/MyVoice/" + file)
 				except:
 					pass
 
